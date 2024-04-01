@@ -47,78 +47,127 @@ dtype_to_int_dtype = {
 dtype_to_interesting_values = {
     torch.float: [
         # zero and neg zero
-        (0.0, '0', '0' * 8, '0' * 23, torch.float, 'zero'),
-        (-0.0, '1', '0' * 8, '0' * 23, torch.float, 'zero_neg'),
+        (0.0, '0', '0' * 8, '0' * 23, 'zero'),
+        (-0.0, '1', '0' * 8, '0' * 23, 'zero_neg'),
         # special values
-        (float('nan'), '0', '1' * 8, '1' + '0' * 22, torch.float, 'nan'),
-        (float('inf'), '0', '1' * 8, '0' * 23, torch.float, 'inf'),
-        (float('-inf'), '1', '1' * 8, '0' * 23, torch.float, 'inf_neg'),
+        (float('nan'), '0', '1' * 8, '1' + '0' * 22, 'nan'),
+        (float('inf'), '0', '1' * 8, '0' * 23, 'inf'),
+        (float('-inf'), '1', '1' * 8, '0' * 23, 'inf_neg'),
         # values below verified with from https://www.h-schmidt.net/FloatConverter/IEEE754.html
         # largest normal
-        (3.402823466385288598117042e+38, '0', '1' * 7 + '0', '1' * 23, torch.float, 'largest_norm'),
-        (-3.402823466385288598117042e+38, '1', '1' * 7 + '0', '1' * 23, torch.float, 'largest_norm_neg'),
+        (3.402823466385288598117042e+38, '0', '1' * 7 + '0', '1' * 23, 'largest_norm'),
+        (-3.402823466385288598117042e+38, '1', '1' * 7 + '0', '1' * 23, 'largest_norm_neg'),
         # smallest normal
-        (1.175494350822287507968737e-38, '0', '0' * 7 + '1', '0' * 23, torch.float, 'smallest_norm'),
-        (-1.175494350822287507968737e-38, '1', '0' * 7 + '1', '0' * 23, torch.float, 'smallest_norm_neg'),
+        (1.175494350822287507968737e-38, '0', '0' * 7 + '1', '0' * 23, 'smallest_norm'),
+        (-1.175494350822287507968737e-38, '1', '0' * 7 + '1', '0' * 23, 'smallest_norm_neg'),
         # largest denormal
-        (1.175494210692441075487029e-38, '0', '0' * 8, '1' * 23, torch.float, 'largest_denorm'),
-        (-1.175494210692441075487029e-38, '1', '0' * 8, '1' * 23, torch.float, 'largest_denorm_neg'),
+        (1.175494210692441075487029e-38, '0', '0' * 8, '1' * 23, 'largest_denorm'),
+        (-1.175494210692441075487029e-38, '1', '0' * 8, '1' * 23, 'largest_denorm_neg'),
         # smallest denormal
-        (1.401298464324817070923730e-45, '0', '0' * 8, '0' * 22 + '1', torch.float, 'smallest_denorm'),
-        (-1.401298464324817070923730e-45, '1', '0' * 8, '0' * 22 + '1', torch.float, 'smallest_denorm_neg'),
+        (1.401298464324817070923730e-45, '0', '0' * 8, '0' * 22 + '1', 'smallest_denorm'),
+        (-1.401298464324817070923730e-45, '1', '0' * 8, '0' * 22 + '1', 'smallest_denorm_neg'),
         # positive and negative value
-        (30.0, '0', '10000011', '1' * 3 + '0' * 20, torch.float, 'random_pos'),
-        (-24.0, '1', '10000011', '1' + '0' * 22, torch.float, 'random_neg'),
+        (30.0, '0', '10000011', '1' * 3 + '0' * 20, 'random_pos'),
+        (-24.0, '1', '10000011', '1' + '0' * 22, 'random_neg'),
     ],
     torch.bfloat16: [
         # zero and neg zero
-        (0.0, '0', '0' * 8, '0' * 7, torch.bfloat16, 'zero'),
-        (-0.0, '1', '0' * 8, '0' * 7, torch.bfloat16, 'zero_neg'),
+        (0.0, '0', '0' * 8, '0' * 7, 'zero'),
+        (-0.0, '1', '0' * 8, '0' * 7, 'zero_neg'),
         # special values
-        (float('nan'), '0', '1' * 8, '1' + '0' * 6, torch.bfloat16, 'nan'),
-        (float('inf'), '0', '1' * 8, '0' * 7, torch.bfloat16, 'inf'), 
-        (float('-inf'), '1', '1' * 8, '0' * 7, torch.bfloat16, 'inf_neg'),
+        (float('nan'), '0', '1' * 8, '1' + '0' * 6, 'nan'),
+        (float('inf'), '0', '1' * 8, '0' * 7, 'inf'), 
+        (float('-inf'), '1', '1' * 8, '0' * 7, 'inf_neg'),
         # values below checked with TODO
         # largest normal
-        (3.38953e+38, '0', '1' * 7 + '0', '1' * 7, torch.bfloat16, 'largest_norm'),
-        (-3.38953e+38, '1', '1' * 7 + '0', '1' * 7, torch.bfloat16, 'largest_norm_neg'),
+        (3.38953e+38, '0', '1' * 7 + '0', '1' * 7, 'largest_norm'),
+        (-3.38953e+38, '1', '1' * 7 + '0', '1' * 7, 'largest_norm_neg'),
         # smallest normal
-        (1.17549e-38, '0', '0' * 7 + '1', '0' * 7, torch.bfloat16, 'smallest_norm'),
-        (-1.17549e-38, '1', '0' * 7 + '1', '0' * 7, torch.bfloat16, 'smallest_norm_neg'),
+        (1.17549e-38, '0', '0' * 7 + '1', '0' * 7, 'smallest_norm'),
+        (-1.17549e-38, '1', '0' * 7 + '1', '0' * 7, 'smallest_norm_neg'),
         # largest denormal
-        (1.16631e-38, '0', '0' * 8, '1' * 7, torch.bfloat16, 'largest_denorm'),
-        (-1.16631e-38, '1', '0' * 8, '1' * 7, torch.bfloat16, 'largest_denorm_neg'),
+        (1.16631e-38, '0', '0' * 8, '1' * 7, 'largest_denorm'),
+        (-1.16631e-38, '1', '0' * 8, '1' * 7, 'largest_denorm_neg'),
         # smallest denormal
-        (9.18355e-41, '0', '0' * 8, '0' * 6 + '1', torch.bfloat16, 'smallest_denorm'),
-        (-9.18355e-41, '1', '0' * 8, '0' * 6 + '1', torch.bfloat16, 'smallest_denorm_neg'),
+        (9.18355e-41, '0', '0' * 8, '0' * 6 + '1', 'smallest_denorm'),
+        (-9.18355e-41, '1', '0' * 8, '0' * 6 + '1', 'smallest_denorm_neg'),
         # positive and negative value
-        (30.0, '0', '10000011', '1' * 3 + '0' * 4, torch.bfloat16, 'random_pos'),
-        (-24.0, '1', '10000011', '1' + '0' * 6, torch.bfloat16, 'random_neg'),
+        (30.0, '0', '10000011', '1' * 3 + '0' * 4, 'random_pos'),
+        (-24.0, '1', '10000011', '1' + '0' * 6, 'random_neg'),
     ],
     torch.float16: [
         # zero and neg zero
-        (0.0, '0', '0' * 5, '0' * 10, torch.float16, 'zero'),
-        (-0.0, '1', '0' * 5, '0' * 10, torch.float16, 'zero_neg'),
+        (0.0, '0', '0' * 5, '0' * 10, 'zero'),
+        (-0.0, '1', '0' * 5, '0' * 10, 'zero_neg'),
         # special values
-        (float('nan'), '0', '1' * 5, '1' + '0' * 9, torch.float16, 'nan'),
-        (float('inf'), '0', '1' * 5, '0' * 10, torch.float16, 'inf'),
-        (float('-inf'), '1', '1' * 5, '0' * 10, torch.float16, 'inf_neg'),
+        (float('nan'), '0', '1' * 5, '1' + '0' * 9, 'nan'),
+        (float('inf'), '0', '1' * 5, '0' * 10, 'inf'),
+        (float('-inf'), '1', '1' * 5, '0' * 10, 'inf_neg'),
         # values below checked with https://en.wikipedia.org/wiki/Half-precision_floating-point_format
         # largest normal
-        (65504, '0', '1' * 4 + '0', '1' * 10, torch.float16, 'largest_normal'),
-        (-65504, '1', '1' * 4 + '0', '1' * 10, torch.float16, 'largest_normal_neg'),
+        (65504, '0', '1' * 4 + '0', '1' * 10, 'largest_normal'),
+        (-65504, '1', '1' * 4 + '0', '1' * 10, 'largest_normal_neg'),
         # smallest normal
-        (0.00006103515625, '0', '0' * 4 + '1', '0' * 10, torch.float16, 'smallest_normal'),
-        (-0.00006103515625, '1', '0' * 4 + '1', '0' * 10, torch.float16, 'smallest_normal_neg'),
+        (0.00006103515625, '0', '0' * 4 + '1', '0' * 10, 'smallest_normal'),
+        (-0.00006103515625, '1', '0' * 4 + '1', '0' * 10, 'smallest_normal_neg'),
         # largest denormal
-        (0.000060975552, '0', '0' * 5, '1' * 10, torch.float16, 'largest_denorm'),
-        (-0.000060975552, '1', '0' * 5, '1' * 10, torch.float16, 'largest_denorm_neg'),
+        (0.000060975552, '0', '0' * 5, '1' * 10, 'largest_denorm'),
+        (-0.000060975552, '1', '0' * 5, '1' * 10, 'largest_denorm_neg'),
         # smallest denormal
-        (0.000000059604645, '0', '0' * 5, '0' * 9 + '1', torch.float16, 'smallest_denorm'),
-        (-0.000000059604645, '1', '0' * 5, '0' * 9 + '1', torch.float16, 'smallest_denorm_neg'),
+        (0.000000059604645, '0', '0' * 5, '0' * 9 + '1', 'smallest_denorm'),
+        (-0.000000059604645, '1', '0' * 5, '0' * 9 + '1', 'smallest_denorm_neg'),
         # positive and negative value
-        (30.0, '0', '10011', '1' * 3 + '0' * 7, torch.float16, 'random_pos'),
-        (-24.0, '1', '10011', '1' + '0' * 9, torch.float16, 'random_neg'),
+        (30.0, '0', '10011', '1' * 3 + '0' * 7, 'random_pos'),
+        (-24.0, '1', '10011', '1' + '0' * 9, 'random_neg'),
+    ],
+    torch.float8_e4m3fn: [
+        # zero and neg zero
+        (0.0, '0', '0000', '000', 'zero'),
+        (-0.0, '1', '0000', '000', 'zero_neg'),
+        # special values
+        # note: no pos or neg inf
+        (float('nan'), '0', '1111', '111', 'nan'),
+        # values below checked with https://arxiv.org/pdf/2209.05433.pdf, Table 1
+        # largest normal
+        (448.0, '0', '1111', '110', 'largest_normal'),
+        (-448.0, '1', '1111', '110', 'largest_normal_neg'),
+        # smallest normal
+        (2 ** -6, '0', '0001', '000', 'smallest_normal'),
+        (-2 ** -6, '1', '0001', '000', 'smallest_normal'),
+        # largest denormal
+        (0.875 * 2 ** -6, '0', '0000', '111', 'largest_denormal'),
+        (-0.875 * 2 ** -6, '1', '0000', '111', 'largest_denormal_neg'),
+        # smallest denormal
+        (2 ** -9, '0', '0000', '001', 'smallest_denormal'),
+        (-2 ** -9, '1', '0000', '001', 'smallest_denormal_neg'),
+        # positive and negative value
+        (30.0, '0', '1011', '111', 'random_pos'),
+        (-24.0, '1', '1011', '100', 'random_neg'),
+    ],
+    torch.float8_e5m2: [
+        # zero and neg zero
+        (0.0, '0', '00000', '00', 'zero'),
+        (-0.0, '1', '00000', '00', 'zero_neg'),
+        # special values
+        (float('nan'), '0', '11111', '11', 'nan'),
+        (float('inf'), '0', '11111', '00', 'inf'),
+        (float('-inf'), '1', '11111', '00', 'inf_neg'),
+        # values below checked with https://arxiv.org/pdf/2209.05433.pdf, Table 1
+        # largest normal
+        (57344.0, '0', '11110', '11', 'largest_normal'),
+        (-57344.0, '1', '11110', '11', 'largest_normal_neg'),
+        # smallest normal
+        (2 ** -14, '0', '00001', '00', 'smallest_normal'),
+        (-2 ** -14, '1', '00001', '00', 'smallest_normal'),
+        # largest denormal
+        (0.75 * 2 ** -14, '0', '00000', '11', 'largest_denormal'),
+        (-0.75 * 2 ** -14, '1', '00000', '11', 'largest_denormal_neg'),
+        # smallest denormal
+        (2 ** -16, '0', '00000', '01', 'smallest_denormal'),
+        (-2 ** -16, '1', '00000', '01', 'smallest_denormal_neg'),
+        # positive and negative value
+        (32.0, '0', '10100', '00', 'random_pos'),
+        (-24.0, '1', '10011', '10', 'random_neg'),
     ],
 }
 
@@ -128,8 +177,8 @@ def _assert_equals(fp_ref, s_enc_ref, e_enc_ref, m_enc_ref, dtype):
     bitwidth = dtype_to_bitwidth[dtype]
     s_enc, e_enc, m_enc = get_sem_bits(x, bitwidth=bitwidth)
     assert s_enc_ref == s_enc
-    assert e_enc_ref == e_enc
-    assert m_enc_ref == m_enc
+    assert e_enc_ref == e_enc, f'{e_enc_ref} != {e_enc}'
+    assert m_enc_ref == m_enc, f'{m_enc_ref} != {m_enc}'
 
     # test going from encoding to float
     s_i, e_i, m_f, special_value = sem_bits_to_sem_vals(s_enc, e_enc, m_enc, dtype)
@@ -188,13 +237,20 @@ def sem_bits_to_sem_vals(s_enc, e_enc, m_enc, dtype):
 
     # handle special values
     if all([bit == '1' for bit in e_enc]):
-        if all([bit == '0' for bit in m_enc]):
-            if s_enc == '0':
-                return None, None, None, float('inf')
+        if dtype in (torch.float32, torch.bfloat16, torch.float16, torch.float8_e5m2):
+            if all([bit == '0' for bit in m_enc]):
+                if s_enc == '0':
+                    return None, None, None, float('inf')
+                else:
+                    return None, None, None, float('-inf')
             else:
-                return None, None, None, float('-inf')
+                return None, None, None, float('nan')
         else:
-            return None, None, None, float('nan')
+            assert dtype is torch.float8_e4m3fn
+            # 1. float8_e4m3fn does not have infinity
+            # 2. float8_e4m3fn only sets {s}.{1111}.{111} for nan
+            if all([b == '1' for b in e_enc + m_enc]):
+                return None, None, None, float('nan')
 
     exponent = exp_encoding_to_exp(e_enc, dtype)
 
@@ -248,7 +304,7 @@ def run(dtype):
     headers = ['orig_val', 'formula', 's_enc', 'e_enc', 'm_enc', 'note']
     results = []
     interesting_values = dtype_to_interesting_values[dtype]
-    for fp_ref, s_enc_ref, e_enc_ref, m_enc_ref, dtype, notes in interesting_values:
+    for fp_ref, s_enc_ref, e_enc_ref, m_enc_ref, notes in interesting_values:
         
         # test that things still work
         _assert_equals(fp_ref, s_enc_ref, e_enc_ref, m_enc_ref, dtype)
@@ -269,6 +325,7 @@ if __name__ == '__main__':
         torch.float,
         torch.bfloat16,
         torch.float16,
-        # torch.float8_e4m3fn,
+        torch.float8_e4m3fn,
+        torch.float8_e5m2,
     ):
         run(dtype)
