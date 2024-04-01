@@ -1,12 +1,6 @@
 """
 Solidifying knowledge of floating point formats
 
-next:
-* add exponent bias
-* add (s) * 2^e * 1.x form
-* normal and denormal
-* add special values
-
 maybe later:
 * look into rounding
 """
@@ -145,6 +139,17 @@ def sem_vals_to_formula(s_i, e_i, m_f, special_value):
         return special_value
     return f'{s_i} * 2^{e_i} * {m_f}'
 
+def assert_same(fp1, fp2):
+    if math.isnan(fp1):
+        assert math.isnan(fp2)
+    elif math.isinf(fp1):
+        if fp1 > 0:
+            assert math.isinf(fp2) and fp2 > 0
+        else:
+            assert math.isinf(fp2) and fp2 < 0
+    else:
+        assert (abs(fp2 - fp1) / (fp1 + 1e-20)) - 1 < 1e-12, f'{fp2} != {fp1}'
+
 def run(dtype):
     print('dtype', dtype)
     bitwidth = dtype_to_bitwidth[dtype]
@@ -199,15 +204,7 @@ def run(dtype):
         new_val = sem_vals_to_f32(s_i, e_i, m_f, special_value)
         formula = sem_vals_to_formula(s_i, e_i, m_f, special_value)
         # print('new_val', new_val)
-        if math.isnan(orig_val):
-            assert math.isnan(new_val)
-        elif math.isinf(orig_val):
-            if orig_val > 0:
-                assert math.isinf(new_val) and new_val > 0
-            else:
-                assert math.isinf(new_val) and new_val < 0
-        else:
-            assert (abs(new_val - orig_val) / (orig_val + 1e-20)) - 1 < 1e-12, f'{new_val} != {orig_val}'
+        assert_same(orig_val, new_val)
 
         results.append([orig_val, formula, s_enc, e_enc, m_enc, note])
 
