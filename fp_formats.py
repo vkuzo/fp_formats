@@ -44,6 +44,98 @@ dtype_to_int_dtype = {
     torch.float8_e5m2: torch.int8,
 }
 
+dtype_to_interesting_values = {
+    torch.float: [
+        # zero and neg zero
+        (0.0, '0', '0' * 8, '0' * 23, torch.float, 'zero'),
+        (-0.0, '1', '0' * 8, '0' * 23, torch.float, 'zero_neg'),
+        # special values
+        (float('nan'), '0', '1' * 8, '1' + '0' * 22, torch.float, 'nan'),
+        (float('inf'), '0', '1' * 8, '0' * 23, torch.float, 'inf'),
+        (float('-inf'), '1', '1' * 8, '0' * 23, torch.float, 'inf_neg'),
+        # values below verified with from https://www.h-schmidt.net/FloatConverter/IEEE754.html
+        # largest normal
+        (3.402823466385288598117042e+38, '0', '1' * 7 + '0', '1' * 23, torch.float, 'largest_norm'),
+        (-3.402823466385288598117042e+38, '1', '1' * 7 + '0', '1' * 23, torch.float, 'largest_norm_neg'),
+        # smallest normal
+        (1.175494350822287507968737e-38, '0', '0' * 7 + '1', '0' * 23, torch.float, 'smallest_norm'),
+        (-1.175494350822287507968737e-38, '1', '0' * 7 + '1', '0' * 23, torch.float, 'smallest_norm_neg'),
+        # largest denormal
+        (1.175494210692441075487029e-38, '0', '0' * 8, '1' * 23, torch.float, 'largest_denorm'),
+        (-1.175494210692441075487029e-38, '1', '0' * 8, '1' * 23, torch.float, 'largest_denorm_neg'),
+        # smallest denormal
+        (1.401298464324817070923730e-45, '0', '0' * 8, '0' * 22 + '1', torch.float, 'smallest_denorm'),
+        (-1.401298464324817070923730e-45, '1', '0' * 8, '0' * 22 + '1', torch.float, 'smallest_denorm_neg'),
+        # positive and negative value
+        (30.0, '0', '10000011', '1' * 3 + '0' * 20, torch.float, 'random_pos'),
+        (-24.0, '1', '10000011', '1' + '0' * 22, torch.float, 'random_neg'),
+    ],
+    torch.bfloat16: [
+        # zero and neg zero
+        (0.0, '0', '0' * 8, '0' * 7, torch.bfloat16, 'zero'),
+        (-0.0, '1', '0' * 8, '0' * 7, torch.bfloat16, 'zero_neg'),
+        # special values
+        (float('nan'), '0', '1' * 8, '1' + '0' * 6, torch.bfloat16, 'nan'),
+        (float('inf'), '0', '1' * 8, '0' * 7, torch.bfloat16, 'inf'), 
+        (float('-inf'), '1', '1' * 8, '0' * 7, torch.bfloat16, 'inf_neg'),
+        # values below checked with TODO
+        # largest normal
+        (3.38953e+38, '0', '1' * 7 + '0', '1' * 7, torch.bfloat16, 'largest_norm'),
+        (-3.38953e+38, '1', '1' * 7 + '0', '1' * 7, torch.bfloat16, 'largest_norm_neg'),
+        # smallest normal
+        (1.17549e-38, '0', '0' * 7 + '1', '0' * 7, torch.bfloat16, 'smallest_norm'),
+        (-1.17549e-38, '1', '0' * 7 + '1', '0' * 7, torch.bfloat16, 'smallest_norm_neg'),
+        # largest denormal
+        (1.16631e-38, '0', '0' * 8, '1' * 7, torch.bfloat16, 'largest_denorm'),
+        (-1.16631e-38, '1', '0' * 8, '1' * 7, torch.bfloat16, 'largest_denorm_neg'),
+        # smallest denormal
+        (9.18355e-41, '0', '0' * 8, '0' * 6 + '1', torch.bfloat16, 'smallest_denorm'),
+        (-9.18355e-41, '1', '0' * 8, '0' * 6 + '1', torch.bfloat16, 'smallest_denorm_neg'),
+        # positive and negative value
+        (30.0, '0', '10000011', '1' * 3 + '0' * 4, torch.bfloat16, 'random_pos'),
+        (-24.0, '1', '10000011', '1' + '0' * 6, torch.bfloat16, 'random_neg'),
+    ],
+    torch.float16: [
+        # zero and neg zero
+        (0.0, '0', '0' * 5, '0' * 10, torch.float16, 'zero'),
+        (-0.0, '1', '0' * 5, '0' * 10, torch.float16, 'zero_neg'),
+        # special values
+        (float('nan'), '0', '1' * 5, '1' + '0' * 9, torch.float16, 'nan'),
+        (float('inf'), '0', '1' * 5, '0' * 10, torch.float16, 'inf'),
+        (float('-inf'), '1', '1' * 5, '0' * 10, torch.float16, 'inf_neg'),
+        # values below checked with https://en.wikipedia.org/wiki/Half-precision_floating-point_format
+        # largest normal
+        (65504, '0', '1' * 4 + '0', '1' * 10, torch.float16, 'largest_normal'),
+        (-65504, '1', '1' * 4 + '0', '1' * 10, torch.float16, 'largest_normal_neg'),
+        # smallest normal
+        (0.00006103515625, '0', '0' * 4 + '1', '0' * 10, torch.float16, 'smallest_normal'),
+        (-0.00006103515625, '1', '0' * 4 + '1', '0' * 10, torch.float16, 'smallest_normal_neg'),
+        # largest denormal
+        (0.000060975552, '0', '0' * 5, '1' * 10, torch.float16, 'largest_denorm'),
+        (-0.000060975552, '1', '0' * 5, '1' * 10, torch.float16, 'largest_denorm_neg'),
+        # smallest denormal
+        (0.000000059604645, '0', '0' * 5, '0' * 9 + '1', torch.float16, 'smallest_denorm'),
+        (-0.000000059604645, '1', '0' * 5, '0' * 9 + '1', torch.float16, 'smallest_denorm_neg'),
+        # positive and negative value
+        (30.0, '0', '10011', '1' * 3 + '0' * 7, torch.float16, 'random_pos'),
+        (-24.0, '1', '10011', '1' + '0' * 9, torch.float16, 'random_neg'),
+    ],
+}
+
+def _assert_equals(fp_ref, s_enc_ref, e_enc_ref, m_enc_ref, dtype):
+    # test going from float to encoding
+    x = torch.tensor(fp_ref, dtype=dtype)
+    bitwidth = dtype_to_bitwidth[dtype]
+    s_enc, e_enc, m_enc = get_sem_bits(x, bitwidth=bitwidth)
+    assert s_enc_ref == s_enc
+    assert e_enc_ref == e_enc
+    assert m_enc_ref == m_enc
+
+    # test going from encoding to float
+    s_i, e_i, m_f, special_value = sem_bits_to_sem_vals(s_enc, e_enc, m_enc, dtype)
+    fp = sem_vals_to_f32(s_i, e_i, m_f, special_value)
+    assert_same(fp_ref, fp)
+
 def get_sem_bits(x: torch.Tensor, bitwidth: int) -> Tuple[str, str, str]:
     """
     Input: a tensor with a single floating point element
@@ -153,60 +245,20 @@ def assert_same(fp1, fp2):
 def run(dtype):
     print('dtype', dtype)
     bitwidth = dtype_to_bitwidth[dtype]
-
     headers = ['orig_val', 'formula', 's_enc', 'e_enc', 'm_enc', 'note']
     results = []
+    interesting_values = dtype_to_interesting_values[dtype]
+    for fp_ref, s_enc_ref, e_enc_ref, m_enc_ref, dtype, notes in interesting_values:
+        
+        # test that things still work
+        _assert_equals(fp_ref, s_enc_ref, e_enc_ref, m_enc_ref, dtype)
 
-    vals = [
-        [0.0, None],
-        [-0.0, None],
-        # TODO(later): test that other bit formats corresponding to nan also work,
-        # no way to get from them from a float nan
-        [float('nan'), None],
-        [float('inf'), None],
-        [float('-inf'), None],
-        [30.0, 'sample pos'],
-        [-24.0, 'sample neg'],
-    ]
-
-    # extend the table programmaticaly for largest/smallest normals and 
-    # subnormals
-    s_len, e_len, m_len = dtype_to_sem_len[dtype]
-    # s, e, m, notes
-    bit_vals = [
-        ('0', '1' * (e_len - 1) + '0', '1' * m_len, 'largest normal'),
-        ('1', '1' * (e_len - 1) + '0', '1' * m_len, 'largest neg normal'),
-        ('0', '0' * (e_len - 1) + '1', '0' * m_len, 'smallest normal'),
-        ('1', '0' * (e_len - 1) + '1', '0' * m_len, 'smallest neg normal'),
-        ('0', '0' * e_len, '1' * m_len, 'largest subnormal'),
-        ('1', '0' * e_len, '1' * m_len, 'largest neg subnormal'),
-        ('0', '0' * e_len, '0' * (m_len - 1) + '1', 'smallest subnormal'),
-        ('1', '0' * e_len, '0' * (m_len - 1) + '1', 'smallest neg subnormal'),
-    ]
-
-    for s, e, m, notes in bit_vals:
-        # https://stackoverflow.com/a/38283005/1058521 works for float, but will
-        # not extend trivially to non-cpp formats
-        # new_float = struct.unpack('!f',struct.pack('!I', int(s + e + m, 2)))[0]
-
-        # for now, just use the utils we built in this file
-        s, e, m, special_value = sem_bits_to_sem_vals(s, e, m, dtype)
-        new_float = sem_vals_to_f32(s, e, m, special_value)
-        vals.append([new_float, notes])
-
-    for orig_val, note in vals:
-        # print('orig_val', orig_val, 'note', note)
-        x = torch.tensor(orig_val, dtype=dtype)
-        # print('orig x', x)
-        s_enc, e_enc, m_enc = get_sem_bits(x, bitwidth=bitwidth)
-        # print('encodings', s_enc, e_enc, m_enc)
-        s_i, e_i, m_f, special_value = sem_bits_to_sem_vals(s_enc, e_enc, m_enc, dtype)
-        new_val = sem_vals_to_f32(s_i, e_i, m_f, special_value)
+        # create the formula
+        s_i, e_i, m_f, special_value = sem_bits_to_sem_vals(s_enc_ref, e_enc_ref, m_enc_ref, dtype)
         formula = sem_vals_to_formula(s_i, e_i, m_f, special_value)
-        # print('new_val', new_val)
-        assert_same(orig_val, new_val)
 
-        results.append([orig_val, formula, s_enc, e_enc, m_enc, note])
+        # create the table row
+        results.append([fp_ref, formula, s_enc_ref, e_enc_ref, m_enc_ref, notes])
 
     print(tabulate.tabulate(results, headers=headers))
     print('\n')
