@@ -133,7 +133,7 @@ dtype_to_interesting_values = {
         (-448.0, '1', '1111', '110', 'largest_normal_neg'),
         # smallest normal
         (2 ** -6, '0', '0001', '000', 'smallest_normal'),
-        (-2 ** -6, '1', '0001', '000', 'smallest_normal'),
+        (-2 ** -6, '1', '0001', '000', 'smallest_normal_neg'),
         # largest denormal
         (0.875 * 2 ** -6, '0', '0000', '111', 'largest_denormal'),
         (-0.875 * 2 ** -6, '1', '0000', '111', 'largest_denormal_neg'),
@@ -158,7 +158,7 @@ dtype_to_interesting_values = {
         (-57344.0, '1', '11110', '11', 'largest_normal_neg'),
         # smallest normal
         (2 ** -14, '0', '00001', '00', 'smallest_normal'),
-        (-2 ** -14, '1', '00001', '00', 'smallest_normal'),
+        (-2 ** -14, '1', '00001', '00', 'smallest_normal_neg'),
         # largest denormal
         (0.75 * 2 ** -14, '0', '00000', '11', 'largest_denormal'),
         (-0.75 * 2 ** -14, '1', '00000', '11', 'largest_denormal_neg'),
